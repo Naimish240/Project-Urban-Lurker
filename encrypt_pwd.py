@@ -2,13 +2,10 @@
 
 import bcrypt
 
-def generate_salt():
-    return bcrypt.gensalt()
-
-def hash_string(string, salt):
+def hash_string(string):
     # Returns a plaintext string
-    final = bcrypt.hashpw(string,salt).decode()
+    final = bcrypt.hashpw(string,bcrypt.gensalt()).decode()
     return final
 
-def check_hash(user_string, stored_string):
-    pass
+def check_hash(user_string, stored_hash):
+    return bcrypt.checkpw(user_string.encode(),stored_hash)
