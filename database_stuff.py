@@ -9,8 +9,8 @@ c = conn.cursor()
 def initialize():
     # name: username, pwd: password, regno: regno, hostel: hostel name
     c.execute("CREATE TABLE IF NOT EXISTS users (name TEXT, pwd TEXT, regno TEXT, hostel TEXT)")
-    # owner: name, file_name: name of file, file_size: size of file, category: category of file, ext: extension
-    c.execute("CREATE TABLE IF NOT EXISTS files (owner TEXT, file_name TEXT, file_size TEXT, category TEXT, ext TEXT)")
+    # owner: name, file_name: name of file, file_size: size of file
+    c.execute("CREATE TABLE IF NOT EXISTS files (owner TEXT, file_name TEXT, file_size TEXT)")
 
 def insert_into_users(name, pwd, regno, hostel):
     # Inserts values into the table users
@@ -31,9 +31,9 @@ def retrieve_pwd(name):
     pwd = str(c.fetchone())
     return pwd
 
-def insert_into_files(owner, file_name, file_size, category, ext):
+def insert_into_files(owner, file_name, file_size):
     # Inserts values into the table files
-    c.execute("INSERT INTO files VALUES ('{}','{}','{}','{}','{}')".format(owner,file_name,file_size,category,ext))
+    c.execute("INSERT INTO files VALUES ('{}','{}','{}')".format(owner,file_name,file_size))
     conn.commit()
 
 def find_persons_with_file(file_to_find):
@@ -71,7 +71,7 @@ def user_files(user):
 def add_files(user,files_to_add,file_size, category, ext):
     # all parameters passed are lists, adds them to the list
     for i in range(len(files_to_add)):
-        insert_into_files(user,files_to_add[i],file_size[i],category[i],ext[i])
+        insert_into_files(user,files_to_add[i],file_size[i])
 
 def delete_files(user,files):
     # Verify with user before running this function
@@ -83,6 +83,6 @@ if __name__ == '__main__':
     initialize()    # always run
     # Sample IO
     insert_into_users("naimish","asdf","jkl;","asdf")
-    insert_into_files("naimish","asdf","string","qwer",".exe")
+    insert_into_files("naimish","asdf","qwer")
     c.close()
     conn.close()
