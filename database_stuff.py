@@ -12,31 +12,24 @@ def initialize():
     # owner: name, file_name: name of file, file_size: size of file, category: category of file, ext: extension
     c.execute("CREATE TABLE IF NOT EXISTS files (owner TEXT, file_name TEXT, file_size TEXT, category TEXT, ext TEXT)")
 
-def insert_into_users(name, pwd, s_mail, hostel):
+def insert_into_users(name, pwd, regno, hostel):
     # Inserts values into the table users
-    c.execute("INSERT INTO users VALUES ('{}','{}','{}','{}')".format(name,pwd,s_mail,hostel))
+    c.execute("INSERT INTO users VALUES ('{}','{}','{}','{}')".format(name,pwd,regno,hostel))
     conn.commit()
 
 def check_username(name):
-    # Function to check if username is valid or not
+    # Function to check if username exists or not
     c.execute("SELECT name FROM users WHERE name = '{}'".format(name))
-    if c.fetchall():
+    if c.fetchone():
         return False
     return True
 
 def retrieve_pwd(name):
-    # Function to access the salted hash
-    # It returns the salted hash as a binary string
+    # Function to access the hash
+    # It returns the salted hash in plaintext
     c.execute("SELECT pwd FROM users WHERE name = '{}'".format(name))
     pwd = str(c.fetchone())
-    return pwd.encode()
-
-def retrieve_salt(name):
-    # Function to return the salt of the user
-    # It returns the binary string
-    c.execute("SELECT salt FROM users WHERE name = '{}'".format(name))
-    salt = str(c.fetchone())
-    return salt.encode()
+    return pwd
 
 def insert_into_files(owner, file_name, file_size, category, ext):
     # Inserts values into the table files
@@ -61,7 +54,7 @@ def find_persons_with_file(file_to_find):
 def find_hostel(user):
     # Function to find the hostel of the user
     c.execute("SELECT hostel FROM users WHERE name = '{}'".format(user))
-    return str(c.fetchall())
+    return str(c.fetchone())
 
 def user_files(user):
     # Function to pull list of files the person has added to the database
