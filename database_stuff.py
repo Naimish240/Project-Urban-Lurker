@@ -8,14 +8,35 @@ c = conn.cursor()
 
 def initialize():
     # name: username, pwd: password, regno: regno, hostel: hostel name
-    c.execute("CREATE TABLE IF NOT EXISTS users (name TEXT, pwd TEXT, regno TEXT, hostel TEXT)")
+    c.execute("CREATE TABLE IF NOT EXISTS users (name TEXT, pwd TEXT, salt TEXT, regno TEXT, hostel TEXT)")
     # owner: name, file_name: name of file, file_size: size of file, category: category of file, ext: extension
     c.execute("CREATE TABLE IF NOT EXISTS files (owner TEXT, file_name TEXT, file_size TEXT, category TEXT, ext TEXT)")
 
-def insert_into_users(name, pwd, s_mail, hostel):
+def insert_into_users(name, pwd, salt, s_mail, hostel):
     # Inserts values into the table users
-    c.execute("INSERT INTO users VALUES ('{}','{}','{}','{}')".format(name,pwd,s_mail,hostel))
+    c.execute("INSERT INTO users VALUES ('{}','{}','{}','{}','{}')".format(name,pwd,salt,s_mail,hostel))
     conn.commit()
+
+def check_username(name):
+    # Function to check if username is valid or not
+    c.execute("SELECT name FROM users WHERE name = '{}'".format(name))
+    if c.fetchall():
+        return False
+    return True
+
+def retrieve_pwd(name):
+    # Function to access the salted hash
+    # It returns the salted hash as a binary string
+    c.execute("SELECT pwd FROM users WHERE name = '{}'".format(name))
+    pwd = str(c.fetchone())
+    return pwd.encode()
+
+def retrieve_salt(name):
+    # Function to return the salt of the user
+    # It returns the binary string
+    c.execute("SELECT salt FROM users WHERE name = '{}'".format(name))
+    salt = str(c.fetchone())
+    return salt.encode()
 
 def insert_into_files(owner, file_name, file_size, category, ext):
     # Inserts values into the table files
@@ -67,7 +88,8 @@ def delete_files(user,files):
 
 if __name__ == '__main__':
     initialize()    # always run
-    insert_into_users("naimish","asdf","jkl;","asdf")
+    # Sample IO
+    insert_into_users("naimish","asdf","salt","jkl;","asdf")
     insert_into_files("naimish","asdf","string","qwer",".exe")
     c.close()
     conn.close()
