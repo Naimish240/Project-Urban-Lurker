@@ -4,8 +4,9 @@ import bcrypt
 
 def hash_string(string):
     # Returns a plaintext string
-    final = bcrypt.hashpw(string,bcrypt.gensalt()).decode()
+    final = bcrypt.hashpw(string.encode(),bcrypt.gensalt()).decode()
     return final
 
 def check_hash(user_string, stored_hash):
-    return bcrypt.checkpw(user_string.encode(),stored_hash)
+    # Assumes stored hash to be passed in plain text
+    return bcrypt.checkpw(user_string.encode(),stored_hash.encode())
