@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # This module is used to encrypt the passwords stored in the database
 
 import bcrypt
