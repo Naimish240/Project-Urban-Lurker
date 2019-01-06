@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from .models import Album
 from django.template import loader
 
@@ -16,5 +16,12 @@ def index(request):
     return HttpResponse(html)
 
 def details(request,id):
-    return HttpResponse("<h2>Details of album id: {}<h2>".format(id))
+    try:
+        album = Album.objects.get(pk=id)
+    except Album.DoesNotExist:
+        raise Http404("Album does not exist!")
+
+    html = "<h2>Details of album id: {}<h2>".format(id)
+    html += str(album).replace('\n','<br>')
+    return HttpResponse(html)
 

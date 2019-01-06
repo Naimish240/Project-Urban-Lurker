@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import sqlite3
+import pyodbc
 
-conn = sqlite3.connect("TheUrbanLurker.db")
+conn = pyodbc.connect("TheUrbanLurker.db")
 
 c = conn.cursor()
 
