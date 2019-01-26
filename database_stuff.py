@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
 import pyodbc
 
 conn = pyodbc.connect("TheUrbanLurker.db")
